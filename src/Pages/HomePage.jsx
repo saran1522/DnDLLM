@@ -1,9 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
-import InputNode from "../Components/InputNode";
-import LlmNode from "../Components/LlmNode";
-import OutputNode from "../Components/OutputNode";
-import Navbar from "../Components/Navbar";
-import Sidebar from "../Components/Sidebar";
+// import InputNode from "../Components/InputNode";
+import InputNode from "../components/InputNode";
+import LlmNode from "../components/LlmNode";
+import OutputNode from "../components/OutputNode";
+import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
 
 import {
   addEdge,
