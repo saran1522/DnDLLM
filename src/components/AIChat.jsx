@@ -18,8 +18,10 @@ function AIChat() {
   } = useModelDetails();
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function getResponse() {
+    setLoading(true);
     const groq = new Groq({
       apiKey: apiKey,
       dangerouslyAllowBrowser: true,
@@ -45,6 +47,8 @@ function AIChat() {
         description: error.message,
       });
       console.error("Error:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -66,14 +70,17 @@ function AIChat() {
             </span>
             <p className="">{inputQuery}</p>
           </div>
-          {output && (
-            <div className="flex gap-10 items-start w-fit mx-7 bg-gray-50 border rounded-3xl p-4">
-              <span className="rounded-full bg-blue-100 p-1 text-sm mt-4">
-                ✍
-              </span>
-              <Markdown className="leading-loose">{output}</Markdown>
-            </div>
-          )}
+          {output &&
+            (loading ? (
+              <p className="my-4 mx-12">Getting response...</p>
+            ) : (
+              <div className="flex gap-10 items-start w-fit mx-7 bg-gray-50 border rounded-3xl p-4">
+                <span className="rounded-full bg-blue-100 p-1 text-sm mt-4">
+                  ✍
+                </span>
+                <Markdown className="leading-loose">{output}</Markdown>
+              </div>
+            ))}
         </div>
       ) : (
         <ChatIntro />
