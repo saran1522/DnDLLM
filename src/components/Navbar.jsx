@@ -1,4 +1,3 @@
-import React from "react";
 import Run from "./Run";
 import DeployButton from "./DeployButton";
 

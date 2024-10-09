@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from "react";
-// import InputNode from "../Components/InputNode";
 import InputNode from "../components/InputNode";
 import LlmNode from "../components/LlmNode";
 import OutputNode from "../components/OutputNode";
@@ -22,17 +21,17 @@ const initialNodes = [
   {
     id: "1",
     type: "inputType",
-    position: { x: 230, y: 100 },
+    position: { x: 220, y: 100 },
   },
   {
     id: "2",
     type: "llmType",
-    position: { x: 600, y: 60 },
+    position: { x: 570, y: 60 },
   },
   {
     id: "3",
     type: "outputType",
-    position: { x: 1000, y: 100 },
+    position: { x: 880, y: 100 },
   },
 ];
 

@@ -6,15 +6,16 @@ import {
   IoCheckmarkCircleOutline,
 } from "react-icons/io5";
 import { nanoid } from "nanoid";
+import Groq from "groq-sdk";
 
-const ChatContext = createContext();
+const LLMModelContext = createContext();
 
-function ChatProvider({ children }) {
+function LLMModelProvider({ children }) {
   const [sampleInput, setSampleInput] = useState("");
   const [inputQuery, setInputQuery] = useState("");
   const [sampleOutput, setSampleOutput] = useState("");
   const [outputResponse, setOutputResponse] = useState("");
-  const [model, setModel] = useState("gpt-3");
+  const [model, setModel] = useState("llama3-8b-8192");
   const [apiBase, setApiBase] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [maxTokens, setMaxTokens] = useState(0);
@@ -22,6 +23,7 @@ function ChatProvider({ children }) {
   const [success, setSuccess] = useState(false);
   const [deployedModels, setDeployedModels] = useState([]);
   const [currentModel, setCurrentModel] = useState({});
+  const [newChat, setNewChat] = useState(true);
 
   function handleSampleInput(e) {
     setSampleInput(e.target.value);
@@ -63,6 +65,10 @@ function ChatProvider({ children }) {
     setSuccess((prev) => !prev);
   }
 
+  function handleNewChat(value) {
+    setNewChat(value);
+  }
+
   function handleDeployedModels() {
     const newModel = {
       id: nanoid(),
@@ -78,6 +84,7 @@ function ChatProvider({ children }) {
       "You can now chat with the AI Assistant!"
     );
     setCurrentModel(newModel);
+    setNewChat(true);
   }
 
   function handleCurrentModel(id) {
@@ -87,6 +94,7 @@ function ChatProvider({ children }) {
 
   function handleDeleteDeployedModel(id) {
     setDeployedModels((prev) => prev.filter((m) => m.id !== id));
+    setSuccess(false);
   }
 
   function showErrorToast(description) {
@@ -125,36 +133,30 @@ function ChatProvider({ children }) {
     });
   }
 
-  async function fetchOpenAIResponse() {
+  async function getResponse() {
+    const groq = new Groq({
+      apiKey: apiKey,
+      dangerouslyAllowBrowser: true,
+    });
+
     try {
-      const res = await fetch(`${apiBase}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: model,
-          messages: [{ role: "user", content: sampleInput }],
-          max_tokens: maxTokens,
-          temperature: temperature,
-        }),
+      const chatCompletion = await groq.chat.completions.create({
+        messages: [
+          {
+            role: "user",
+            content: sampleInput,
+          },
+        ],
+        model: model,
+        temperature: Number(temperature),
+        max_tokens: Number(maxTokens),
       });
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-
-      const data = await res.json();
-      setSampleOutput(data.choices[0].message.content);
-      return data.choices[0].message.content;
-      // setSampleOutput("sample response");
-      // return "sample response";
+      setSampleOutput(chatCompletion.choices[0]?.message?.content);
     } catch (error) {
       toast("Can't fetch response", {
         position: "top-right",
         className:
-          "bg-red-500 flex gap-2 text-lg items-start text-white rounded-xl p-3",
+          "bg-red-500 flex gap-2 h-72 overflow-auto text-lg items-start text-white rounded-xl p-3",
         description: error.message,
       });
       console.error("Error:", error);
@@ -171,10 +173,10 @@ function ChatProvider({ children }) {
       showErrorToast("Please select the model text before running the flow");
       return;
     }
-    if (!apiBase) {
-      showErrorToast("Please enter the API base before running the flow");
-      return;
-    }
+    // if (!apiBase) {
+    //   showErrorToast("Please enter the API base before running the flow");
+    //   return;
+    // }
     if (!apiKey) {
       showErrorToast("Please enter the API key before running the flow");
       return;
@@ -187,7 +189,7 @@ function ChatProvider({ children }) {
       showErrorToast("Please select the temperature before running the flow");
       return;
     }
-    const res = await fetchOpenAIResponse();
+    const res = await getResponse();
     setSuccess(true);
     if (res) {
       showSuccessToast(
@@ -197,7 +199,7 @@ function ChatProvider({ children }) {
     }
   }
   return (
-    <ChatContext.Provider
+    <LLMModelContext.Provider
       value={{
         sampleInput,
         sampleOutput,
@@ -211,6 +213,7 @@ function ChatProvider({ children }) {
         success,
         deployedModels,
         currentModel,
+        newChat,
         handleSampleInput,
         handleSampleOutput,
         handleModel,
@@ -225,19 +228,20 @@ function ChatProvider({ children }) {
         handleOutputResponse,
         handleDeployedModels,
         handleDeleteDeployedModel,
+        handleNewChat,
       }}
     >
       {children}
-    </ChatContext.Provider>
+    </LLMModelContext.Provider>
   );
 }
 
-function useChat() {
-  const context = useContext(ChatContext);
+function useModelDetails() {
+  const context = useContext(LLMModelContext);
   if (!context) {
     throw new Error("useChat must be used within a ChatProvider");
   }
   return context;
 }
 
-export { ChatProvider, useChat };
+export { LLMModelProvider, useModelDetails };

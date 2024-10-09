@@ -1,8 +1,8 @@
-import { useChat } from "../Providers/ChatProvider";
+import { useModelDetails } from "../Contexts/LLMModelContext";
 import { IoPlayCircleOutline } from "react-icons/io5";
 
 function Run() {
-  const { handleRunModel } = useChat();
+  const { handleRunModel } = useModelDetails();
   return (
     <button
       onClick={(e) => handleRunModel(e)}

@@ -1,9 +1,8 @@
-import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import { GoDotFill } from "react-icons/go";
 import { BiChip } from "react-icons/bi";
 import LlmInput from "./LlmInput";
-import { useChat } from "../Providers/ChatProvider";
+import { useModelDetails } from "../Contexts/LLMModelContext";
 function LlmNode() {
   const {
     model,
@@ -16,9 +15,9 @@ function LlmNode() {
     handleApiKey,
     handleMaxTokens,
     handleTemperature,
-  } = useChat();
+  } = useModelDetails();
   return (
-    <div className="bg-white z-30 min-w-72 text-sm rounded-xl shadow-[0px_0px_10px_rgba(0,0,0,0.15)]">
+    <div className="bg-white z-30 min-w-64 max-w-64 text-sm rounded-xl shadow-[0px_0px_10px_rgba(0,0,0,0.15)]">
       <Handle
         type="target"
         position={Position.Left}
@@ -33,12 +32,12 @@ function LlmNode() {
           <GoDotFill className="text-green-600" />
         </div>
         <div className="bg-blue-50 p-2 text-gray-500">
-          Please fill in the details to connect to the OpenAI API
+          Please fill in the details to connect to the Groq API
         </div>
         <div className="flex p-3 flex-col">
           <div className="flex p-1 flex-col">
             <label htmlFor="model" className="text-sm pb-2">
-              Model Name
+              Select Model
             </label>
             <select
               name="model"
@@ -47,20 +46,38 @@ function LlmNode() {
               onChange={(e) => handleModel(e)}
               className="border nodrag border-gray-400 rounded-md p-2"
             >
-              <option value="gpt-3">GPT-3.5</option>
-              <option value="gpt-4">GPT-4</option>
-              <option value="gpt-4o">GPT-4o</option>
-              <option value="gpt-4o Mini">GPT-4o Mini</option>
+              <option value="llama3-8b-8192">llama3-8b-8192</option>
+              <option value="llama-3.1-70b-versatile">
+                llama-3.1-70b-versatile
+              </option>
+              <option value="llama-3.1-8b-instant">llama-3.1-8b-instant</option>
+              <option value="llama-3.2-11b-text-preview">
+                llama-3.2-11b-text-preview
+              </option>
+              <option value="llama-3.2-11b-vision-preview">
+                llama-3.2-11b-vision-preview
+              </option>
+              <option value="llama-3.2-1b-preview">llama-3.2-1b-preview</option>
+              <option value="llama3-70b-8192">llama3-70b-8192</option>
+              <option value="llama3-groq-70b-8192-tool-use-preview">
+                llama3-groq-70b-8192-tool-use-preview
+              </option>
+              <option value="llama3-groq-8b-8192-tool-use-preview">
+                llama3-groq-8b-8192-tool-use-preview
+              </option>
+              <option value="llama-3.2-90b-text-preview">
+                llama-3.2-90b-text-preview
+              </option>
             </select>
           </div>
-          <LlmInput
-            label="OpenAI API Base"
+          {/* <LlmInput
+            label="API Base"
             name="apiBase"
             value={apiBase}
             setValue={handleApiBase}
-          />
+          /> */}
           <LlmInput
-            label="OpenAI Key"
+            label="Groq API Key"
             name="apiKey"
             value={apiKey}
             setValue={handleApiKey}

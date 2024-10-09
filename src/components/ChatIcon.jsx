@@ -1,9 +1,9 @@
 import React from "react";
 import { AiFillMessage } from "react-icons/ai";
-import { useChat } from "../Providers/ChatProvider";
+import { useModelDetails } from "../Contexts/LLMModelContext";
 import { Link } from "react-router-dom";
 function ChatIcon() {
-  const { deployedModels, currentModel } = useChat();
+  const { deployedModels, currentModel } = useModelDetails();
   const isModelAvailable = deployedModels && deployedModels.length > 0;
   return (
     <Link

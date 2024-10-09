@@ -1,9 +1,9 @@
 import { LuFileInput } from "react-icons/lu";
 import NodeContent from "./NodeContent";
-import { useChat } from "../Providers/ChatProvider";
+import { useModelDetails } from "../Contexts/LLMModelContext";
 
 function InputNode() {
-  const { sampleInput, handleSampleInput } = useChat();
+  const { sampleInput, handleSampleInput } = useModelDetails();
 
   return (
     <div className="min-w-72">

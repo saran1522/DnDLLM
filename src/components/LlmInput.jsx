@@ -1,5 +1,3 @@
-import React from "react";
-
 function LlmInput({ label, name, value, setValue }) {
   return (
     <div className="flex p-1 flex-col">

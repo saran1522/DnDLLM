@@ -1,12 +1,12 @@
 import { LuFileOutput } from "react-icons/lu";
 import NodeContent from "./NodeContent";
-import { useChat } from "../Providers/ChatProvider";
+import { useModelDetails } from "../Contexts/LLMModelContext";
 import Markdown from "react-markdown";
 
 function OutputNode() {
-  const { sampleOutput } = useChat();
+  const { sampleOutput } = useModelDetails();
   return (
-    <div className="min-w-72">
+    <div className="min-w-72 max-w-72">
       <NodeContent
         title="Output"
         icon={LuFileOutput}

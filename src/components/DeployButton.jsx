@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useChat } from "../Providers/ChatProvider";
+import { useModelDetails } from "../Contexts/LLMModelContext";
 import { IoCloseOutline } from "react-icons/io5";
 
 function DeployButton() {
@@ -10,7 +10,7 @@ function DeployButton() {
     deployedModels,
     success,
     currentModel,
-  } = useChat();
+  } = useModelDetails();
   return (
     <>
       {deployedModels.length > 0 ? (
