@@ -134,6 +134,7 @@ function LLMModelProvider({ children }) {
   }
 
   async function getResponse() {
+    setSampleOutput("Getting response...");
     const groq = new Groq({
       apiKey: apiKey,
       dangerouslyAllowBrowser: true,
@@ -152,6 +153,7 @@ function LLMModelProvider({ children }) {
         max_tokens: Number(maxTokens),
       });
       setSampleOutput(chatCompletion.choices[0]?.message?.content);
+      return true;
     } catch (error) {
       toast("Can't fetch response", {
         position: "top-right",
@@ -160,6 +162,7 @@ function LLMModelProvider({ children }) {
         description: error.message,
       });
       console.error("Error:", error);
+      return false;
     }
   }
 

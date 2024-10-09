@@ -4,7 +4,8 @@ import { useModelDetails } from "../Contexts/LLMModelContext";
 import Markdown from "react-markdown";
 
 function OutputNode() {
-  const { sampleOutput } = useModelDetails();
+  const { sampleOutput} = useModelDetails();
+
   return (
     <div className="min-w-72 max-w-72">
       <NodeContent
